@@ -3,18 +3,23 @@ require("dotenv").config();
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const connectDB = require('./db/db');
+const userRoutes = require('./Routes/userRoutes')
 
 const app = express();
 connectDB();
 
-app.use(express);
-app.use(cookieParser);
+app.use(express.json());
+app.use(cookieParser());
+
+app.use('/api/user', userRoutes)
 
 const corsOptions = {
   origin: process.env.CLIENT_URL,
   credentials: true,
 };
 app.use(cors(corsOptions));
+
+
 
 app.get('/', (req, res) => {
     res.send("Chat App Backend is Running...");
