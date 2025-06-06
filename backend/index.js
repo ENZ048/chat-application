@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const connectDB = require('./db/db');
 const userRoutes = require('./Routes/userRoutes')
 const createWebSocketServer = require('./wsServer');
-
+const messageRoutes = require('./Routes/messageRoutes');
 const protect = require('./middleware/protect');
 
 const app = express();
@@ -14,7 +14,8 @@ connectDB();
 app.use(express.json());
 app.use(cookieParser());
 
-app.use('/api/user', userRoutes)
+app.use('/api/user', userRoutes);
+app.use('/api/messages', messageRoutes);
 
 const corsOptions = {
   origin: process.env.CLIENT_URL,

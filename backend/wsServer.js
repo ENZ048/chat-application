@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const {WebSocketServer} = require("ws");
 const url = require("url");
+const Message = require("./models/messageModel");
 
 function createWebSocketServer(server) {
     const wss = new WebSocketServer({server});
@@ -26,14 +27,25 @@ function createWebSocketServer(server) {
             return;
         }
 
-        ws.on("message", (message) => {
+        ws.on("message", async (message) => {
             const msg = JSON.parse(message);
             console.log("Message recieved : ", msg);
+
+            const {text, receiver} = msg;
+
+            const savedMessage = await Message.create({
+                sender: ws.user._id,
+                receiver,
+                text,
+            });
+
+
 
             [...wss.clients].filter((client) => client !== ws && client.readyState === ws.OPEN)
             .forEach((client) => client.send(JSON.stringify({
                 from: ws.user.email,
-                message: msg.message,
+                text: savedMessage.text,
+                createdAt: savedMessage.createdAt,
             })));
         });
 
