@@ -25,4 +25,35 @@ const getMessages = async (req, res) => {
     }
 }
 
-module.exports = getMessages;
+const deleteMessage = async (req, res) => {
+    try {
+        const {messageId} = req.params;
+
+        const message = await Message.findById(messageId);
+
+        if(!message){
+            return res.status(404).send({
+                message: "Message not found"
+            });
+        };
+
+        if(message.sender.toString() !== req.user._id){
+            return res.status(403).send({
+                message: "Not authorized to delete this message"
+            });
+        };
+
+        await message.deleteOne();
+
+        res.status(200).send({
+            message: "Message deleted successfully"
+        });
+    } catch (error) {
+        console.log("Error in deleting message : ", error);
+        res.status(500).send({
+            message: "Internal Server Error"
+        });
+    };
+};
+
+module.exports = {getMessages, deleteMessage};
