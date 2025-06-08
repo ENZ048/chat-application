@@ -56,4 +56,36 @@ const deleteMessage = async (req, res) => {
     };
 };
 
-module.exports = {getMessages, deleteMessage};
+const readReceipt = async (req, res) => {
+    try {
+        const {messageId} = req.params;
+
+        const message = await Message.findById(messageId);
+
+        if(!message){
+            return res.status(404).send({
+                message: "Meesage not found"
+            });
+        };
+
+        if(message.receiver.toString() !== req.user._id){
+            return res.status(403).send({
+                message: "Not Authorized",
+            });
+        };
+
+        message.read = true;
+        await message.save();
+
+        res.status(200).send({
+            message: "Marked as read",
+        });
+    } catch (error) {
+        console.log("Error in read receipt", error);
+        res.status(500).send({
+            message: "Internal Server Error",
+        });
+    }
+}
+
+module.exports = {getMessages, deleteMessage, readReceipt};

@@ -11,13 +11,20 @@ const MessageSchema = new mongoose.Schema(
         receiver: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "user",
-            required: true,
         },
         text: {
             type: String,
             required: true,
         },
-
+        read: {
+            type: Boolean,
+            default: false,
+        },
+        group: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "group",
+            default: null
+        }
     },
     {
         timestamps: true,
