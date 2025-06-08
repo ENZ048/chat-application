@@ -9,9 +9,8 @@ export default function AuthPage() {
         setLogin(!isLogin);
     }
   return (
-    <div className='min-h-screen min-w-sceen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex justify-center items-center p-4'>
+    <div className='min-h-screen min-w-sceen  bg-gradient-to-r from-[#0f172a] via-[#1e293b] to-[#0f172a] flex justify-center items-center p-4'>
         {isLogin ? (<LoginForm toggleForm={toggleForm}/>) : <RegisterForm toggleForm={toggleForm}/>}
-        
     </div>
   )
 }

@@ -7,7 +7,7 @@ const userRoutes = require('./Routes/userRoutes')
 const createWebSocketServer = require('./wsServer');
 const messageRoutes = require('./Routes/messageRoutes');
 const protect = require('./middleware/protect');
-const groouRoutes = require('./Routes/groupRoutes');
+const groupRoutes = require('./Routes/groupRoutes');
 
 const app = express();
 connectDB();
@@ -23,7 +23,7 @@ app.use(cookieParser());
 
 app.use('/api/user', userRoutes);
 app.use('/api/messages', messageRoutes);
-app.use('/api/groups', groouRoutes);
+app.use('/api/groups', groupRoutes);
 
 
 
