@@ -23,4 +23,4 @@ const createGroup = async (req, res) => {
     }
 };
 
-module.exports = createGroup
+module.exports = {createGroup};
