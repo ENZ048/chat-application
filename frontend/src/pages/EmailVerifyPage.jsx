@@ -48,7 +48,7 @@ export default function EmailVerifyPage() {
             )}
             {!loading && !verified && (
                 <>
-                    <p className="text-red-500 text-lg">Email verification failed. Please try again.</p>
+                    <p className="text-white text-lg font-extrabold">Email verification failed. Please try again.</p>
                 </>
             )}
         </div>
