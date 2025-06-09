@@ -1,8 +1,8 @@
-import { MessageCircle, ArrowRight } from "lucide-react";
+import { MessageCircle, ArrowRight, Instagram } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Shield, Zap, Globe, Smartphone, Bell, Search } from "lucide-react";
 import { Github, Twitter, Linkedin } from "lucide-react";
-import './styles.css'
+import "./styles.css";
 
 export default function LandingPage() {
   const features = [
@@ -144,7 +144,144 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <footer className="bg-black text-white py-16"></footer>
+      <footer className="bg-black w-full text-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+            <div className="col-span-1 md:col-span-2">
+              <div className="flex items-center mb-6">
+                <div className="bg-gradient-to-r from-blue-500 to-purple-500 p-2 rounded-lg mr-3">
+                  <MessageCircle className="w-6 h-6 text-white" />
+                </div>
+                <span className="text-2xl font-bold">ChatApp</span>
+              </div>
+              <p className="text-gray-400 mb-6 max-w-md">
+                The future of communication is here. Connect, collaborate, and
+                communicate with the world through our innovative chat platform.
+              </p>
+
+              <div className="flex space-x-4">
+                <a
+                  href="https://github.com/ENZ048"
+                  target="_blank"
+                  className="text-gray-400 hover:text-white transition-colors duration-300"
+                >
+                  <Github className="w-6 h-6" />
+                </a>
+                <a
+                  href="https://www.instagram.com/pratikkkkk.__/"
+                  target="_blank"
+                  className="text-gray-400 hover:text-white transition-colors duration-300"
+                >
+                  <Instagram className="w-6 h-6" />
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/pratik-yesare/"
+                  target="_blank"
+                  className="text-gray-400 hover:text-white transition-colors duration-300"
+                >
+                  <Linkedin className="w-6 h-6" />
+                </a>
+              </div>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-6">Product</h3>
+              <ul className="space-y-3">
+                <li>
+                  <a
+                    href="#"
+                    className="text-gray-400 hover:text-white transition-colors duration-300"
+                  >
+                    Features
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="text-gray-400 hover:text-white transition-colors duration-300"
+                  >
+                    Pricing
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="text-gray-400 hover:text-white transition-colors duration-300"
+                  >
+                    API
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="text-gray-400 hover:text-white transition-colors duration-300"
+                  >
+                    Documentation
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-6">Company</h3>
+              <ul className="space-y-3">
+                <li>
+                  <a
+                    href="#"
+                    className="text-gray-400 hover:text-white transition-colors duration-300"
+                  >
+                    About
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="text-gray-400 hover:text-white transition-colors duration-300"
+                  >
+                    Blog
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="text-gray-400 hover:text-white transition-colors duration-300"
+                  >
+                    Careers
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="text-gray-400 hover:text-white transition-colors duration-300"
+                  >
+                    Contact
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="border-t border-gray-800 pt-8">
+            <div className="flex flex-col md:flex-row justify-between items-center">
+              <p className="text-gray-400 mb-4 md:mb-0">
+                © 2025 Developed by <a   href="https://github.com/ENZ048"
+                  target="_blank" className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent font-bold hover:text-white">Pratik Yesare</a>. All rights reserved.
+              </p>
+              <div className="flex space-x-6">
+                <a
+                  href="#"
+                  className="text-gray-400 hover:text-white transition-colors duration-300"
+                >
+                  Privacy Policy
+                </a>
+                <a
+                  href="#"
+                  className="text-gray-400 hover:text-white transition-colors duration-300"
+                >
+                  Terms of Service
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
