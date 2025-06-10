@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema(
         password: { type: String, required: true },
         verified: { type: Boolean, default: false },
         verificationLinkSent: { type: Boolean, required: false },
-        avatarLink: { type: String },
+        avatar: { type: String, default: 'https://api.dicebear.com/9.x/notionists/svg?seed=Jocelyn' },
     },
     { timestamps: true }
 )
@@ -47,4 +47,4 @@ const validateLogin = (data) => {
     return schema.validate(data);
 }
 
-module.exports = {User, validateLogin, validateRegister}
+module.exports = { User, validateLogin, validateRegister }
