@@ -1,7 +1,6 @@
 const bycrpt = require('bcrypt');
 const { User, validateRegister } = require('../models/userModel');
 const { Token } = require('../models/tokenModel');
-const sendEmail = require("../utils/sendEmail");
 const crypto = require("crypto");
 
 const registerController = async (req, res) => {
@@ -32,19 +31,17 @@ const registerController = async (req, res) => {
             lastName,
             email,
             password: hashedPassowrd,
-        }).save();
+        }).save();  
 
 
         const token = await new Token({
             userId: user._id,
             token: crypto.randomBytes(32).toString("hex"),
         }).save();
-
-        const url = `${process.env.CLIENT_URL}/users/${user._id}/verify/${token.token}`;
-        await sendEmail(user.email, "Verify your email", url);
+        
 
         res.status(201).send({
-            message: "User registered successfully. Verification email sent.",
+            message: "User registered successfully.",
         });
     } catch (error) {
         console.log("Registration error : ", error.message);

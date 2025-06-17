@@ -17,7 +17,7 @@ export default function RegisterForm({toggleForm}) {
         setLoading(true);
         try {
             await axios.post("user/register", form);
-            toast.success("Registered! Check your email to verify.");
+            toast.success("Registeration Successfull!");
             toggleForm();
         } catch (error) {
             toast.error(error.response?.data?.message || "Something went wrong");

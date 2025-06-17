@@ -21,11 +21,11 @@ const loginController = async (req, res) => {
             });
         };
 
-        if(!user.verified){
-            return res.status(403).send({
-                message: "Email not verified"
-            });
-        };
+        // if(!user.verified){
+        //     return res.status(403).send({
+        //         message: "Email not verified"
+        //     });
+        // };
 
         const validatePassword = await bcrypt.compare(password, user.password);
         if(!validatePassword){

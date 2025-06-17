@@ -9,8 +9,6 @@ const userSchema = new mongoose.Schema(
         lastName: { type: String, required: true },
         email: { type: String, required: true },
         password: { type: String, required: true },
-        verified: { type: Boolean, default: false },
-        verificationLinkSent: { type: Boolean, required: false },
         avatar: { type: String, default: 'https://api.dicebear.com/9.x/notionists/svg?seed=Jocelyn' },
     },
     { timestamps: true }
