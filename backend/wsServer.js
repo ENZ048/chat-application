@@ -32,7 +32,7 @@ function createWebSocketServer(server) {
         try {
             const decoded = jwt.verify(token, process.env.JWTPRIVATEKEY);
             ws.user = decoded;
-            console.log(`WebSocket connected : ${using.user.email}`);
+            console.log(`WebSocket connected : ${ws.user.email}`);
 
             onlineUsers.set(ws.user._id, ws);
 
@@ -73,39 +73,64 @@ function createWebSocketServer(server) {
                     group: group || null
                 });
 
+                const receiverSocket = onlineUsers.get(receiver);
+
                 if (group) {
                     const Group = require('./models/groupModel');
                     const groupDoc = await Group.findById(group);
 
                     if (groupDoc) {
-                        [...wss.cliets]
-                            .filter((client) => client.readyState === client.OPEN &&
-                                groupDoc.participants.some((participantId) => participantId.toString() === client.user._id)
+                        [...wss.clients]
+                            .filter((client) =>
+                                client.readyState === client.OPEN &&
+                                groupDoc.participants.some((p) => p.toString() === client.user._id)
                             )
-                            .forEach((client) => client.send(JSON.stringify({
-                                type: "new-group-message",
-                                group: group,
-                                from: ws.user._id,
-                                text: savedMessage.text,
-                                createdAt: savedMessage.createdAt,
-                            })));
-                    }
-                    else {
+                            .forEach((client) => {
+                                client.send(
+                                    JSON.stringify({
+                                        type: "new-group-message",
+                                        group,
+                                        from: ws.user._id,
+                                        text: savedMessage.text,
+                                        createdAt: savedMessage.createdAt,
+                                    })
+                                );
+                            });
 
-                        const receiverSocket = onlineUsers.get(receiver);
-
-                        if (receiverSocket && receiverSocket.readyState === ws.OPEN) {
-                            receiverSocket.send(
-                                JSON.stringify({
-                                    type: "new-message",
-                                    form: ws.user._id,
-                                    text: savedMessage.text,
-                                    createdAt: savedMessage.createdAt,
-                                })
-                            )
-                        }
+                        return; 
                     }
                 }
+
+                if (receiverSocket && receiverSocket.readyState === ws.OPEN) {
+                    receiverSocket.send(
+                        JSON.stringify({
+                            type: "new-message",
+                            from: ws.user._id,
+                            receiver: receiver,
+                            text: savedMessage.text,
+                            createdAt: savedMessage.createdAt,
+                        })
+                    );
+                    console.log("📤 Sent to receiver:", {
+                        type: "new-message",
+                        from: ws.user._id,
+                        receiver: receiver,
+                        text: savedMessage.text,
+                        createdAt: savedMessage.createdAt,
+                    });
+                }
+
+
+                console.log("🧠 Received from:", ws.user._id);
+                console.log("🧠 To receiver:", receiver);
+                console.log("🧠 OnlineUsers:", [...onlineUsers.keys()]);
+
+                if (receiverSocket) {
+                    console.log("✅ Found receiver socket");
+                } else {
+                    console.log("❌ Receiver socket not found");
+                }
+
 
             } catch (error) {
                 console.log("Error in processing websocket message : ", error);

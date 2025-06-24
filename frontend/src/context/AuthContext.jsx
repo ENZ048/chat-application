@@ -6,6 +6,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -14,16 +15,16 @@ export const AuthProvider = ({ children }) => {
         setUser(res.data.user);
       } catch {
         setUser(null);
+      } finally {
+        setLoading(false);
       }
     };
 
-    if (Cookie.get("token")) {
-      fetchUser();
-    }
+    fetchUser();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
+    <AuthContext.Provider value={{ user, setUser, loading }}>
       {children}
     </AuthContext.Provider>
   );

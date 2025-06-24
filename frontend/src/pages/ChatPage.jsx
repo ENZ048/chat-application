@@ -3,13 +3,14 @@ import { LogOut, MessageCircle, User } from "lucide-react";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import ProfileSection from "../components/Auth/Chat/ProfileSection";
+import ChatSection from "../components/Auth/Chat/ChatSection";
 
 export default function ChatPage() {
   const [activeSection, setActiveSection] = useState("chat");
 
   return (
     <div className="flex h-screen bg-gray-900 text-white">
-      <div className="w-20 md:w-40 bg-gray-800 flex flex-col justify-between py-4 px-2">
+      <div className="w-20 md:w-40 bg-gray-900 flex flex-col justify-between py-4 px-2">
         <div>
           <div className="p-3 border-b border-gray-700 flex gap-2 justify-center items-center">
             <div className="bg-gradient-to-r from-blue-500 to-purple-500 p-2 rounded-lg">
@@ -58,7 +59,9 @@ export default function ChatPage() {
         </div>
       </div>
 
-      <ProfileSection/>
+      <div className="flex-grow flex">
+        {activeSection === 'profile' ? <ProfileSection /> : <ChatSection />}
+      </div>
     </div>
   );
 }
