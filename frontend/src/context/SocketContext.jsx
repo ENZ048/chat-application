@@ -8,6 +8,7 @@ export const SocketProvider = ({children}) => {
     const socketRef = useRef(null);
     // eslint-disable-next-line no-unused-vars
     const [isConnected, setIsConnected] = useState(false);
+    const [onlineUsers, setOnlineUsers] = useState([]);
 
     useEffect(() => {
         const ws = new WebSocket(import.meta.env.VITE_BACKEND_URL);
@@ -18,6 +19,19 @@ export const SocketProvider = ({children}) => {
             console.log('Connected to WebSocket');
             setIsConnected(true);
         };
+
+        ws.onmessage = (event) => {
+            try {
+                const message = JSON.parse(event.data);
+
+                if(message.type === "online-users"){
+                    console.log("Online Users : ", message.online);
+                    setOnlineUsers(message.online);
+                }
+            } catch (error) {
+                console.error("WebSocket parsing error:", error);
+            }
+        }
 
         ws.onclose = () => {
             console.log('Disconnected from WebSocket');
@@ -33,7 +47,7 @@ export const SocketProvider = ({children}) => {
     }, []);
 
   return (
-   <SocketContext.Provider value={socketRef.current}>
+   <SocketContext.Provider value={{socket : socketRef.current, onlineUsers}}>
         {children}
    </SocketContext.Provider>
   );

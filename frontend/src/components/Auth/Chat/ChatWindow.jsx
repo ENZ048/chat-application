@@ -9,10 +9,11 @@ export default function ChatWindow({ user, onBack }) {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
   const messageEndRef = useRef(null);
-  const socket = useSocket();
+  const {socket} = useSocket();
   const { user: authUser, loading } = useAuth();
   const [isTyping, setIsTyping] = useState(false);
   const typingTimer = useRef(null);
+  const {onlineUsers} = useSocket();
 
   useEffect(() => {
     let isMounted = true;
@@ -149,6 +150,9 @@ export default function ChatWindow({ user, onBack }) {
         />
         <p className="text-white font-semibold">
           {user.firstName} {user.lastName}
+          {onlineUsers.includes(user._id) && (
+            <span className="ml-2 text-green-400 text-sm">● online</span>
+          )}
         </p>
       </div>
 
