@@ -4,16 +4,17 @@ import { useSocket } from "../../../context/SocketContext";
 import { useAuth } from "../../../context/AuthContext";
 import Placeholder from "./Placeholder";
 import TypingIndiactors from "./TypingIndiactors";
+import { format, isSameDay, isToday, isYesterday } from "date-fns";
 
 export default function ChatWindow({ user, onBack }) {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
   const messageEndRef = useRef(null);
-  const {socket} = useSocket();
+  const { socket } = useSocket();
   const { user: authUser, loading } = useAuth();
   const [isTyping, setIsTyping] = useState(false);
   const typingTimer = useRef(null);
-  const {onlineUsers} = useSocket();
+  const { onlineUsers } = useSocket();
 
   useEffect(() => {
     let isMounted = true;
@@ -134,6 +135,14 @@ export default function ChatWindow({ user, onBack }) {
     }, 2000);
   };
 
+  function getDateLabel(date) {
+    if (isToday(date)) return "Today";
+    if (isYesterday(date)) return "Yesterday";
+    return format(date, "eeee, MMMM d");
+  }
+
+  let lastMessageDate = null;
+
   if (loading) return <div>Loading...</div>;
   if (!authUser) return <Placeholder />;
 
@@ -157,16 +166,39 @@ export default function ChatWindow({ user, onBack }) {
       </div>
 
       <div className="flex-1 overflow-y-auto px-4 py-2 bg-gray-900">
-        {messages.map((msg) => (
-          <div
-            key={msg._id}
-            className={`my-2 max-w-[75%] px-4 py-2 rounded-lg text-white ${
-              msg.fromSelf ? "bg-blue-600 ml-auto" : "bg-gra  y-700"
-            }`}
-          >
-            {msg.text}
-          </div>
-        ))}
+        {messages.map((msg) => {
+          const msgDate = new Date(msg.createdAt);
+          const showDateSeparator =
+            !lastMessageDate || !isSameDay(msgDate, lastMessageDate);
+          lastMessageDate = msgDate;
+
+          return (
+            <React.Fragment key={msg._id}>
+              {showDateSeparator && (
+                <div className="text-center text-gray-400 text-sm my-4">
+                  {getDateLabel(msgDate)}
+                </div>
+              )}
+              <div className="flex flex-col items-start">
+                <div
+                  className={`flex flex-col my-1 max-w-[75%] px-4 py-2 rounded-lg text-white ${
+                    msg.fromSelf ? "bg-blue-600 self-end" : "bg-gray-700"
+                  }`}
+                >
+                  {msg.text}
+
+                  <span
+                    className={`text-xs text-gray-400 py-1${
+                      msg.fromSelf ? "text-right self-end " : "pl-0"
+                    }`}
+                  > 
+                    {format(msgDate, "p")} {/* Example: 4:30 PM */}
+                  </span>
+                </div>
+              </div>
+            </React.Fragment>
+          );
+        })}
         <div ref={messageEndRef} />
       </div>
 

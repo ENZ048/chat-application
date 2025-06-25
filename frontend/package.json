@@ -16,6 +16,7 @@
     "@mui/styled-engine-sc": "^7.1.1",
     "@tailwindcss/vite": "^4.1.8",
     "axios": "^1.9.0",
+    "date-fns": "^4.1.0",
     "js-cookie": "^3.0.5",
     "lucide": "^0.513.0",
     "lucide-react": "^0.513.0",
