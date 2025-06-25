@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import axios from "../../../api/axios";
 import { useSocket } from "../../../context/SocketContext";
 import { useAuth } from "../../../context/AuthContext";
-import LandingPage from "../../../pages/LandingPage";
 import Placeholder from "./Placeholder";
+import TypingIndiactors from "./TypingIndiactors";
 
 export default function ChatWindow({ user, onBack }) {
   const [messages, setMessages] = useState([]);
@@ -11,10 +11,12 @@ export default function ChatWindow({ user, onBack }) {
   const messageEndRef = useRef(null);
   const socket = useSocket();
   const { user: authUser, loading } = useAuth();
+  const [isTyping, setIsTyping] = useState(false);
+  const typingTimer = useRef(null);
 
   useEffect(() => {
     let isMounted = true;
-    setMessages([]); // 👈 Clear messages immediately when user changes
+    setMessages([]);
 
     const fetchMessages = async () => {
       if (!authUser?._id || !user?._id) return;
@@ -66,6 +68,13 @@ export default function ChatWindow({ user, onBack }) {
             ]);
           }
         }
+
+        if (msg.type === "typing" && msg.from === user._id) {
+          setIsTyping(true);
+        }
+        if (msg.type === "stop-typing" && msg.from === user._id) {
+          setIsTyping(false);
+        }
       } catch (error) {
         console.error("Error parsing WebSocket message:", error);
       }
@@ -77,7 +86,7 @@ export default function ChatWindow({ user, onBack }) {
 
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages, isTyping]);
 
   const handleSend = () => {
     if (text.trim() === "") return;
@@ -100,6 +109,28 @@ export default function ChatWindow({ user, onBack }) {
       },
     ]);
     setText("");
+  };
+
+  const handleTyping = () => {
+    if (!socket || !authUser || !user) return;
+
+    socket.send(
+      JSON.stringify({
+        type: "typing",
+        receiver: user._id,
+      })
+    );
+
+    if (typingTimer.current) clearTimeout(typingTimer.current);
+
+    typingTimer.current = setTimeout(() => {
+      socket.send(
+        JSON.stringify({
+          type: "stop-typing",
+          receiver: user._id,
+        })
+      );
+    }, 2000);
   };
 
   if (loading) return <div>Loading...</div>;
@@ -126,7 +157,7 @@ export default function ChatWindow({ user, onBack }) {
           <div
             key={msg._id}
             className={`my-2 max-w-[75%] px-4 py-2 rounded-lg text-white ${
-              msg.fromSelf ? "bg-blue-600 ml-auto" : "bg-gray-700"
+              msg.fromSelf ? "bg-blue-600 ml-auto" : "bg-gra  y-700"
             }`}
           >
             {msg.text}
@@ -135,13 +166,22 @@ export default function ChatWindow({ user, onBack }) {
         <div ref={messageEndRef} />
       </div>
 
+      {isTyping && (
+        <div className="flex justify-start pl-4 mb-2">
+          <TypingIndiactors />
+        </div>
+      )}
+
       <div className="p-3 bg-gray-800 border-t border-gray-700 flex gap-2">
         <input
           type="text"
           className="flex-1 p-2 rounded bg-gray-700 text-white"
           placeholder="Type a message..."
           value={text}
-          onChange={(e) => setText(e.target.value)}
+          onChange={(e) => {
+            setText(e.target.value);
+            handleTyping();
+          }}
           onKeyDown={(e) => e.key === "Enter" && handleSend()}
         />
         <button

@@ -1,0 +1,54 @@
+"filename", "language", "JSON", "Markdown", "JavaScript", "XML", "Properties", "PostCSS", "JavaScript JSX", "HTML", "comment", "blank", "total"
+"g:\chat-application\README.md", "Markdown", 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"g:\chat-application\backend\Routes\groupRoutes.js", "JavaScript", 0, 0, 6, 0, 0, 0, 0, 0, 0, 2, 8
+"g:\chat-application\backend\Routes\messageRoutes.js", "JavaScript", 0, 0, 8, 0, 0, 0, 0, 0, 0, 2, 10
+"g:\chat-application\backend\Routes\userRoutes.js", "JavaScript", 0, 0, 13, 0, 0, 0, 0, 0, 0, 2, 15
+"g:\chat-application\backend\controllers\emailVerifyController.js", "JavaScript", 0, 0, 31, 0, 0, 0, 0, 0, 0, 7, 38
+"g:\chat-application\backend\controllers\getAllUsers.js", "JavaScript", 0, 0, 15, 0, 0, 0, 0, 0, 3, 5, 23
+"g:\chat-application\backend\controllers\groupController.js", "JavaScript", 0, 0, 22, 0, 0, 0, 0, 0, 0, 4, 26
+"g:\chat-application\backend\controllers\loginCntroller.js", "JavaScript", 0, 0, 47, 0, 0, 0, 0, 0, 5, 10, 62
+"g:\chat-application\backend\controllers\messageController.js", "JavaScript", 0, 0, 74, 0, 0, 0, 0, 0, 0, 17, 91
+"g:\chat-application\backend\controllers\registerController.js", "JavaScript", 0, 0, 42, 0, 0, 0, 0, 0, 0, 12, 54
+"g:\chat-application\backend\controllers\userController.js", "JavaScript", 0, 0, 32, 0, 0, 0, 0, 0, 0, 8, 40
+"g:\chat-application\backend\db\db.js", "JavaScript", 0, 0, 9, 0, 0, 0, 0, 0, 0, 1, 10
+"g:\chat-application\backend\index.js", "JavaScript", 0, 0, 35, 0, 0, 0, 0, 0, 0, 13, 48
+"g:\chat-application\backend\middleware\protect.js", "JavaScript", 0, 0, 27, 0, 0, 0, 0, 0, 0, 8, 35
+"g:\chat-application\backend\models\groupModel.js", "JavaScript", 0, 0, 20, 0, 0, 0, 0, 0, 0, 4, 24
+"g:\chat-application\backend\models\messageModel.js", "JavaScript", 0, 0, 33, 0, 0, 0, 0, 0, 0, 3, 36
+"g:\chat-application\backend\models\tokenModel.js", "JavaScript", 0, 0, 23, 0, 0, 0, 0, 0, 0, 3, 26
+"g:\chat-application\backend\models\userModel.js", "JavaScript", 0, 0, 42, 0, 0, 0, 0, 0, 0, 6, 48
+"g:\chat-application\backend\package-lock.json", "JSON", 1920, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1921
+"g:\chat-application\backend\package.json", "JSON", 31, 0, 0, 0, 0, 0, 0, 0, 0, 1, 32
+"g:\chat-application\backend\utils\sendEmail.js", "JavaScript", 0, 0, 18, 0, 0, 0, 0, 0, 0, 6, 24
+"g:\chat-application\backend\wsServer.js", "JavaScript", 0, 0, 119, 0, 0, 0, 0, 0, 0, 31, 150
+"g:\chat-application\frontend\.env", "Properties", 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 2
+"g:\chat-application\frontend\README.md", "Markdown", 0, 7, 0, 0, 0, 0, 0, 0, 0, 6, 13
+"g:\chat-application\frontend\eslint.config.js", "JavaScript", 0, 0, 32, 0, 0, 0, 0, 0, 0, 2, 34
+"g:\chat-application\frontend\index.html", "HTML", 0, 0, 0, 0, 0, 0, 0, 13, 0, 1, 14
+"g:\chat-application\frontend\package-lock.json", "JSON", 4983, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4984
+"g:\chat-application\frontend\package.json", "JSON", 46, 0, 0, 0, 0, 0, 0, 0, 0, 1, 47
+"g:\chat-application\frontend\public\vite.svg", "XML", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1
+"g:\chat-application\frontend\src\App.css", "PostCSS", 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1
+"g:\chat-application\frontend\src\App.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 24, 0, 0, 3, 27
+"g:\chat-application\frontend\src\api\axios.js", "JavaScript", 0, 0, 6, 0, 0, 0, 0, 0, 0, 2, 8
+"g:\chat-application\frontend\src\assets\react.svg", "XML", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1
+"g:\chat-application\frontend\src\components\Auth\Chat\ChatSection.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 30, 0, 0, 7, 37
+"g:\chat-application\frontend\src\components\Auth\Chat\ChatWindow.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 134, 0, 0, 23, 157
+"g:\chat-application\frontend\src\components\Auth\Chat\Placeholder.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 8, 0, 0, 2, 10
+"g:\chat-application\frontend\src\components\Auth\Chat\ProfileSection.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 140, 0, 0, 16, 156
+"g:\chat-application\frontend\src\components\Auth\Chat\UserList.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 60, 0, 2, 8, 70
+"g:\chat-application\frontend\src\components\Auth\LoginForm.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 88, 0, 0, 10, 98
+"g:\chat-application\frontend\src\components\Auth\RegisterForm.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 58, 0, 0, 14, 72
+"g:\chat-application\frontend\src\context\AuthContext.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 27, 0, 0, 7, 34
+"g:\chat-application\frontend\src\context\SocketContext.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 29, 0, 1, 12, 42
+"g:\chat-application\frontend\src\index.css", "PostCSS", 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"g:\chat-application\frontend\src\main.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 15, 0, 0, 2, 17
+"g:\chat-application\frontend\src\pages\AuthPage.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 14, 0, 0, 3, 17
+"g:\chat-application\frontend\src\pages\ChatPage.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 58, 0, 0, 10, 68
+"g:\chat-application\frontend\src\pages\EmailVerifyPage.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 52, 0, 0, 5, 57
+"g:\chat-application\frontend\src\pages\LandingPage.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 273, 0, 0, 15, 288
+"g:\chat-application\frontend\src\pages\styles.css", "PostCSS", 0, 0, 0, 0, 0, 7, 0, 0, 0, 1, 8
+"g:\chat-application\frontend\vite.config.js", "JavaScript", 0, 0, 6, 0, 0, 0, 0, 0, 1, 2, 9
+"g:\chat-application\package-lock.json", "JSON", 385, 0, 0, 0, 0, 0, 0, 0, 0, 1, 386
+"g:\chat-application\package.json", "JSON", 5, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6
+"Total", "-", 7370, 8, 660, 2, 1, 8, 1010, 13, 12, 303, 9387
