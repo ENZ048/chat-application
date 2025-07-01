@@ -68,7 +68,7 @@ const readReceipt = async (req, res) => {
             });
         };
 
-        if(message.receiver.toString() !== req.user._id){
+        if(message.receiver.toString() !== req.user._id.toString()){
             return res.status(403).send({
                 message: "Not Authorized",
             });

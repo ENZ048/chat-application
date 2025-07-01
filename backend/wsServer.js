@@ -48,8 +48,9 @@ function createWebSocketServer(server) {
         ws.on("message", async (message) => {
             try {
                 const msg = JSON.parse(message);
-                console.log("Message recieved : ", msg);
+                console.log("Message received:", msg);
 
+                // ✅ Typing indicators
                 if (msg.type === "typing" || msg.type === "stop-typing") {
                     const receiverSocket = onlineUsers.get(msg.receiver);
 
@@ -64,79 +65,105 @@ function createWebSocketServer(server) {
                     return;
                 }
 
-                const { text, receiver, group } = msg;
-
-                const savedMessage = await Message.create({
-                    sender: ws.user._id,
-                    receiver: receiver || null,
-                    text,
-                    group: group || null
-                });
-
-                const receiverSocket = onlineUsers.get(receiver);
-
-                if (group) {
-                    const Group = require('./models/groupModel');
-                    const groupDoc = await Group.findById(group);
-
-                    if (groupDoc) {
-                        [...wss.clients]
-                            .filter((client) =>
-                                client.readyState === client.OPEN &&
-                                groupDoc.participants.some((p) => p.toString() === client.user._id)
-                            )
-                            .forEach((client) => {
-                                client.send(
-                                    JSON.stringify({
-                                        type: "new-group-message",
-                                        group,
-                                        from: ws.user._id,
-                                        text: savedMessage.text,
-                                        createdAt: savedMessage.createdAt,
-                                    })
-                                );
-                            });
-
-                        return; 
+                // ✅ Message read receipt
+                if (msg.type === "message-read") {
+                    const senderSocket = onlineUsers.get(msg.to);
+                    if (senderSocket && senderSocket.readyState === senderSocket.OPEN) {
+                        senderSocket.send(
+                            JSON.stringify({
+                                type: "message-read",
+                                messageId: msg.messageId,
+                            })
+                        );
                     }
+                    return;
                 }
 
-                if (receiverSocket && receiverSocket.readyState === ws.OPEN) {
-                    receiverSocket.send(
-                        JSON.stringify({
+                // ✅ Only handle actual chat messages from here
+                if (msg.type === "message") {
+                    const { text, receiver, group } = msg;
+
+                    const savedMessage = await Message.create({
+                        sender: ws.user._id,
+                        receiver: receiver || null,
+                        text,
+                        group: group || null,
+                        read: false,
+                    });
+
+                    const receiverSocket = onlineUsers.get(receiver);
+
+                    // ✅ Handle group chat
+                    if (group) {
+                        const Group = require("./models/groupModel");
+                        const groupDoc = await Group.findById(group);
+
+                        if (groupDoc) {
+                            [...wss.clients]
+                                .filter(
+                                    (client) =>
+                                        client.readyState === client.OPEN &&
+                                        groupDoc.participants.some((p) => p.toString() === client.user._id)
+                                )
+                                .forEach((client) => {
+                                    client.send(
+                                        JSON.stringify({
+                                            type: "new-group-message",
+                                            _id: savedMessage._id,
+                                            group,
+                                            from: ws.user._id,
+                                            text: savedMessage.text,
+                                            createdAt: savedMessage.createdAt,
+                                        })
+                                    );
+                                });
+                            return;
+                        }
+                    }
+
+                    // ✅ Handle direct chat
+                    if (receiverSocket && receiverSocket.readyState === ws.OPEN) {
+                        receiverSocket.send(
+                            JSON.stringify({
+                                type: "new-message",
+                                _id: savedMessage._id,
+                                from: ws.user._id,
+                                receiver,
+                                text: savedMessage.text,
+                                createdAt: savedMessage.createdAt,
+                            })
+                        );
+                        console.log("📤 Sent to receiver:", {
                             type: "new-message",
+                            _id: savedMessage._id,
                             from: ws.user._id,
-                            receiver: receiver,
+                            receiver,
                             text: savedMessage.text,
                             createdAt: savedMessage.createdAt,
-                        })
-                    );
-                    console.log("📤 Sent to receiver:", {
-                        type: "new-message",
-                        from: ws.user._id,
-                        receiver: receiver,
-                        text: savedMessage.text,
-                        createdAt: savedMessage.createdAt,
-                    });
+                        });
+                    }
+
+                    const senderSocket = onlineUsers.get(ws.user._id);
+                    if (senderSocket && senderSocket.readyState === senderSocket.OPEN) {
+                        senderSocket.send(
+                            JSON.stringify({
+                                type: "message-sent",
+                                messageId: savedMessage._id,
+                            })
+                        );
+                    }
+
+                    console.log("🧠 Received from:", ws.user._id);
+                    console.log("🧠 To receiver:", receiver);
+                    console.log("🧠 OnlineUsers:", [...onlineUsers.keys()]);
+                    console.log(receiverSocket ? "✅ Found receiver socket" : "❌ Receiver socket not found");
                 }
-
-
-                console.log("🧠 Received from:", ws.user._id);
-                console.log("🧠 To receiver:", receiver);
-                console.log("🧠 OnlineUsers:", [...onlineUsers.keys()]);
-
-                if (receiverSocket) {
-                    console.log("✅ Found receiver socket");
-                } else {
-                    console.log("❌ Receiver socket not found");
-                }
-
 
             } catch (error) {
-                console.log("Error in processing websocket message : ", error);
+                console.log("Error in processing websocket message:", error);
             }
-
         });
+
 
         ws.on("close", () => {
             console.log(`Disconnected : ${ws.user.email}`)

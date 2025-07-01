@@ -35,6 +35,58 @@ export default function ChatWindow({ user, onBack }) {
         }));
 
         setMessages(formatted);
+
+        const unread = res.data.filter((m) => {
+          const receiverId =
+            typeof m.receiver === "string" ? m.receiver : m.receiver?._id;
+          return !m.read && receiverId === authUser._id;
+        });
+
+        console.log("🔍 Unread Messages to mark as read:");
+        unread.forEach((m) =>
+          console.log({
+            messageId: m._id,
+            sender: m.sender,
+            receiver: m.receiver,
+            receiverId:
+              typeof m.receiver === "string" ? m.receiver : m.receiver?._id,
+            authUser: authUser._id,
+          })
+        );
+
+        for (const m of unread) {
+          await axios.patch(
+            `/messages/${m._id}/read`,
+            {},
+            { withCredentials: true }
+          );
+
+          console.log("🔁 Sending read receipt for:", m._id);
+
+          socket.send(
+            JSON.stringify({
+              type: "message-read",
+              messageId: m._id,
+              to: m.sender._id,
+            })
+          );
+        }
+
+        console.log(
+          "🔍 Unread messages:",
+          unread.map((m) => ({
+            id: m._id,
+            receiver: m.receiver,
+            sender: m.sender,
+            read: m.read,
+          }))
+        );
+
+        console.log(
+          "🔍 Marking messages as read: ",
+          unread.map((m) => m._id)
+        );
+        console.log("🔐 Current User: ", authUser?._id);
       } catch (err) {
         console.error("Failed to fetch messages:", err);
       }
@@ -50,10 +102,26 @@ export default function ChatWindow({ user, onBack }) {
   useEffect(() => {
     if (!socket || !authUser || !user) return;
 
-    const handleMessage = (event) => {
+    const handleMessage = async (event) => {
       try {
         const msg = JSON.parse(event.data);
         console.log("📥 WebSocket msg:", msg);
+
+        if (msg.type === "message-read") {
+          console.log("📬 Read receipt received:", msg.messageId);
+
+          setMessages((prev) => {
+            const updated = prev.map((m) => {
+              const sameId = m._id?.toString() === msg.messageId?.toString();
+              if (sameId) {
+                console.log("✅ Updating read status for message:", m._id);
+              }
+              return sameId ? { ...m, read: true } : m;
+            });
+
+            return [...updated];
+          });
+        }
 
         if (msg.type === "new-message") {
           const isRelevant =
@@ -68,7 +136,40 @@ export default function ChatWindow({ user, onBack }) {
                 fromSelf: msg.from === authUser._id,
               },
             ]);
+
+            // ✅ Real-time read marking
+            if (msg.from === user._id && msg.receiver === authUser._id) {
+              try {
+                await axios.patch(
+                  `/messages/${msg._id}/read`,
+                  {},
+                  { withCredentials: true }
+                );
+
+                socket.send(
+                  JSON.stringify({
+                    type: "message-read",
+                    messageId: msg._id,
+                    to: msg.from, // sender
+                  })
+                );
+
+                console.log("✅ Real-time read marked for:", msg._id);
+              } catch (err) {
+                console.error("❌ Failed to mark real-time read:", err);
+              }
+            }
           }
+        }
+
+        if (msg.type === "message-sent") {
+          console.log("✅ Server confirmed message sent:", msg.messageId);
+
+          setMessages((prev) =>
+            prev.map((m) =>
+              typeof m._id === "number" ? { ...m, _id: msg.messageId } : m
+            )
+          );
         }
 
         if (msg.type === "typing" && msg.from === user._id) {
@@ -173,7 +274,7 @@ export default function ChatWindow({ user, onBack }) {
           lastMessageDate = msgDate;
 
           return (
-            <React.Fragment key={msg._id}>
+            <React.Fragment key={msg._id + "-with-date"}>
               {showDateSeparator && (
                 <div className="text-center text-gray-400 text-sm my-4">
                   {getDateLabel(msgDate)}
@@ -188,11 +289,20 @@ export default function ChatWindow({ user, onBack }) {
                   {msg.text}
 
                   <span
-                    className={`text-xs text-gray-400 py-1${
-                      msg.fromSelf ? "text-right self-end " : "pl-0"
+                    className={`text-xs flex items-center gap-1 text-gray-400 ${
+                      msg.fromSelf ? "self-end pr-2" : "pl-2"
                     }`}
-                  > 
-                    {format(msgDate, "p")} {/* Example: 4:30 PM */}
+                  >
+                    {format(new Date(msg.createdAt), "p")}
+                    {msg.fromSelf && (
+                      <>
+                        {msg.read ? (
+                          <span className="text-blue-500">✓✓</span>
+                        ) : (
+                          <span className="text-gray-400">✓</span>
+                        )}
+                      </>
+                    )}
                   </span>
                 </div>
               </div>
